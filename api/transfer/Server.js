@@ -4,8 +4,8 @@ const fse = require('fs-extra')
 const UUID = require('uuid/v4')
 const _ = require('lodash')
 const {ErrorUtil} = require('@ys/collection')
+const EventEmitter = require('events')
 
-const EventEmitter = require('events');
 // fixme: supress MaxListenersExceededWarning workaround
 EventEmitter.defaultMaxListeners = 1000
 
