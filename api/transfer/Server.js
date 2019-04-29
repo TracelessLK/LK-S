@@ -712,13 +712,30 @@ let LKServer = {
         let diffs = [];
         let ckDiffPs = [];
         let member = await Member.asyGetMember(senderUid);
-        let pushMsg = '发来新的消息,请注意查收'
-        // if(msg.body.hasOwnProperty("isGroup")){
-        //     let groups = await Group.asyGetGroup(msg.body.chatId);
-        //     pushMsg = groups.name + " 群 "+member.name +" 成员发来新的群消息,请注意查收"
-        // }else{
-        //     pushMsg = member.name+"发来新的消息,请注意查收"
-        // }
+        // let pushMsg = '发来新的消息,请注意查收'
+        let pushMsg = ''
+        if(msg.body !==null && msg.body !=='undefined'){
+            let content = JSON.parse(msg.body.content);
+            if(msg.body.isGroup){
+                let groups = await Group.asyGetGroup(msg.body.chatId);
+                if(content.type===3){
+                    pushMsg = "群:"+groups.name + ","+member.name +"\n"+"发来了一条语音"
+                }else if(content.type===1){
+                    pushMsg = "群:"+groups.name + ","+member.name +"\n"+"发来了一张图片"
+                }else{
+                    pushMsg = "群:"+groups.name + ","+member.name +"\n"+"发来了一条消息"
+                }
+            }
+            else{
+                if(content.type===3){
+                    pushMsg = member.name+"\n"+"发来了一条语音"
+                }else if(content.type===1){
+                    pushMsg = member.name+"\n"+"发来了一张图片"
+                }else{
+                    pushMsg = member.name+"\n"+"发来了一条消息"
+                }
+            }
+        }
         let targetsNeedTrasfer = new Map();
 
         let localFlowsPs = [];
@@ -747,7 +764,7 @@ let LKServer = {
                                             Device.asyGetDevice(device.id).then((d)=>{
                                                 if(d&&d.venderDid){
                                                     setTimeout(()=>{
-                                                        let content = JSON.parse(msg.body.content);
+                                                        // let content = JSON.parse(msg.body.content);
                                                         // let pushMsg = "新消息:"+(content.type==0?content.data:"图片或语音")
                                                         Push.pushIOS(pushMsg,d.venderDid);
                                                         let date = new Date();
