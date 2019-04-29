@@ -5,6 +5,7 @@ const fs = require('fs')
 const path = require('path')
 const debug = require('debug')('configIndex')
 const debugLevel = require('../constant/debugLevel')
+const rootDir = path.resolve(__dirname, '../')
 
 const config = {
   admin: 'zcy',
@@ -44,8 +45,16 @@ const config = {
   pushTimeInterval: 1000,
   debugLevel: debugLevel.verbose,
   push: {
-    keyId: '',
-    teamId: '355R83R4YL'
+    LK_M: {
+      keyId: 'XA79Y94CD8',
+      teamId: '355R83R4YL',
+      key: path.resolve(rootDir, 'certificate/serviceKey_LK_M.p8')
+    },
+    traceless: {
+      keyId: 'P5T562567F',
+      teamId: '355R83R4YL',
+      key: path.resolve(rootDir, 'certificate/serviceKey_traceless.p8')
+    }
   },
   serverHostAry: ['62.234.46.12', '192.144.200.234']
 }

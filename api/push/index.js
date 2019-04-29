@@ -2,18 +2,14 @@ const apn = require('apn')
 const path = require('path')
 const rootPath = path.resolve(__dirname, '../../')
 const config = require(path.resolve(rootPath, 'config'))
-const {bundleId, push} = config
+const {bundleId, push, appId} = config
 const debug = require('debug')('push')
 
 class Push {
-  static _pushIOS ({alert, badge, deviceTokenAry, isProduction, payload}) {
+  static _pushIOS ({alert, badge, deviceTokenAry, isProduction, payload, token}) {
     return new Promise((resolve, reject) => {
       const options = {
-        token: {
-          key: path.resolve(rootPath, 'certificate/serviceKey.p8'),
-          keyId: push.keyId,
-          teamId: push.teamId
-        },
+        token,
         production: isProduction
       }
 
@@ -49,8 +45,9 @@ class Push {
    */
   static async pushIOS (content, deviceTokenAry, payload = {}) {
     // fixme: push conditionally
-    await Push._pushIOS({alert: content, deviceTokenAry, badge: 1, isProduction: true, payload})
-    await Push._pushIOS({alert: content, deviceTokenAry, badge: 1, isProduction: false, payload})
+    const token = push[appId]
+    await Push._pushIOS({alert: content, deviceTokenAry, badge: 1, isProduction: true, payload, token})
+    await Push._pushIOS({alert: content, deviceTokenAry, badge: 1, isProduction: false, payload, token})
   }
 }
 module.exports = Push

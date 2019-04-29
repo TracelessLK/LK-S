@@ -1,58 +1,16 @@
-const apn = require('apn')
-const path = require('path')
-const rootPath = path.resolve(__dirname, '../')
+const push = require('../api/push')
+const config = require('../config')
 
-function _pushIOS (alert, badge, deviceTokens, production) {
-  return new Promise(resolve => {
-    const options = {
-      token: {
-        key: path.resolve(rootPath, 'certificate/serviceKey.p8'),
-        keyId: 'P5T562567F',
-        teamId: '355R83R4YL'
-      },
-      production
-    }
-
-    const apnProvider = new apn.Provider(options)
-    let notification = new apn.Notification()
-    notification.alert = alert
-    notification.sound = 'slow-spring-board-longer-tail.mp3'
-    notification.badge = badge
-    notification.topic = 'com.hfs.traceless'
-    notification.payload = {
-      a: 23,
-      b: 'ddffs'
-    }
-
-    apnProvider.send(notification, deviceTokens).then((response) => {
-      console.log(response)
-
-      let result
-      if (response.failed.length !== 0) {
-        result = false
-        for (let ele of response.failed) {
-          console.log(ele.response)
-        }
-      } else {
-        result = true
-      }
-      resolve(result)
-    })
-  })
+let uuid = '515fa5421f4bf889e05d1b8ddf780f164df3474d1a8b4e12e293acc3ddd13207'
+const zcy = 'b73bf19d52bef8ad5af0d307eb8c4204f156f97f34e435bd4c6587fa85313929'
+const zcy2 = '0eff8b634faa408a1d4a83446d2a315035d41e60c7f62befd75d4757b7e4d53f'
+// uuid = '32b713f56b56db6b5aa8524b67aed8da2bd2058e8ee66f31963a15dcb9a5419e'
+const option = {
+  alert: 'this is a notification test', badge: 2, deviceTokenAry: [zcy2], isProduction: true,
+  token: config.push.LK_M
 }
-
-function pushIOS (alert, badge, deviceTokens, production) {
-  Promise.all([
-    _pushIOS(alert, badge, deviceTokens, production)]).then((productionResult, devResult) => {
-    if (!productionResult && !devResult) {
-      console.log('push goes wrong')
-      console.log(deviceTokens)
-      console.log(alert)
-    }
-    process.exit(0)
-  })
-}
-
-const spiritDevDid = '595ad4552c99b47a07f643de2ab9ec0c199feda49268c8091827368944b40a86'
-const id2 = 'eee94b73d90e15a731368b4b8116c47aeece088f9a53f06ea29d70053d6e766c'
-pushIOS('0808990', 1, [spiritDevDid, id2], false)
+const sth = push._pushIOS(option)
+sth.then(() => {
+  console.log('Push successfully!')
+  process.exit(0)
+})

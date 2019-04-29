@@ -31,6 +31,3 @@ static/public
 *.ipa
 *.ppk
 *.apk
-
-# push key file
-*.p8
