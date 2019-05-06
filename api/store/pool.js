@@ -15,7 +15,17 @@ const pool = mysql.createPool(option)
 createView()
 const sqlAry = [
   'drop view if exists deviceView;create view deviceView as select t2.name,t1.* from device t1 join member t2 where t1.memberId = t2.id',
-  'drop view if exists groupMemberView;create view groupMemberView as select t2.name,t1.* from groupMember t1 join member t2 where t1.memberId = t2.id',
+  `drop view if exists groupMemberView;
+  create view groupMemberView as 
+  select 
+  t3.name groupName, t2.name memberName, t1.* 
+  from 
+  groupMember t1 
+  join member t2 
+  join groupChat t3
+  where t1.memberId = t2.id
+  and t1.gid = t3.id
+  `,
   'drop view if exists memberView;create view memberView as select * from member',
   'drop view if exists groupChatView;create view groupChatView as select * from groupChat',
   'drop view if exists ticketView;create view ticketView as select t2.name,t1.* from ticket t1 join member t2 where t1.memberId = t2.id'
