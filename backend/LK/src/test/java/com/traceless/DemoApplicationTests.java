@@ -1,4 +1,4 @@
-package com.example.myproject;
+package com.traceless;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
