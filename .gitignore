@@ -1,33 +1,10 @@
-# dependencies
-node_modules
 
 # logs
 log
 *.log
 
-# Nuxt build
-.nuxt
-
-# Nuxt generate
-dist
-
-# Backpack build
-build
-local
-.idea
-static/unversioned
-
-#yarn
-yarn-error.log
-
-#custom
-unversioned*
-static/public
-!updateMeta.json
-
 # mac
 ._*
 
-*.ipa
-*.ppk
-*.apk
+# intelliJ
+.idea
