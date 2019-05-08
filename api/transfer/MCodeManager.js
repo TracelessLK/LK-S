@@ -28,7 +28,7 @@ let MCodeManager = {
 
     asyGetMemberMagicCode:function () {
         return new Promise( (resolve,reject)=> {
-            if(this._memberMCode){
+            if(this._memberMCode && this._memberTime > Date.now()){
                 resolve(this._memberMCode);
             }else{
                 this._asyGetMagicCode().then(()=>{
@@ -39,7 +39,7 @@ let MCodeManager = {
     },
     asyGetOrgMagicCode:function () {
         return new Promise( (resolve,reject)=> {
-            if(this._orgMCode){
+            if(this._orgMCode && this._orgTime > Date.now()){
                 resolve(this._orgMCode);
             }else{
                 this._asyGetMagicCode().then(()=>{
@@ -64,6 +64,7 @@ let MCodeManager = {
      */
     resetSingleMemberMagicCode:function (memberId) {
         Member.asyGetMember(memberId).then((m)=>{
+            this._memberTime = Date.now()
             if(m){
                 let params = [m.name,m.pic];
                 let code = this._magicCode(params);
@@ -81,6 +82,7 @@ let MCodeManager = {
      */
     resetSingleOrgMagicCode:function (orgId) {
         Org.asyGetOrg(orgId).then((org) => {
+            this._orgTime = Date.now()
             if(org){
                 let params = [org.name];
                 let code = this._magicCode(params);
