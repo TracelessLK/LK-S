@@ -194,6 +194,8 @@ let LKServer = {
                     let action = header.action;
 
                   //log
+                  //console.log('msg:', {msg})
+                  //console.log('msg.body.content:', msg.body.content)
                   if (action === 'sendMsg') {
                     const obj = _.cloneDeep(msg)
                     if(obj.body) {
@@ -214,26 +216,34 @@ let LKServer = {
                   //log
 
                     let isValid = LKServer._checkValid(ws,action);
+                  //console.log('action',action)
+                  //console.log('isValid:',isValid)
                     if(isValid){
                         let isResponse = header.response;
+                        let isExist = LKServer._allAction(action,true)
+                        //console.log('isExist:',isExist)
                         if (isResponse) {
                             Message.receiveReport(header.flowId);
                         }
-                        else if (LKServer[action]) {
+                        else if (isExist) {
+                            // console.log('LKServer[action]:',LKServer[action])
                             if(header.preFlowId){//from another server
                                 TransferFlowCursor.getLastFlowId(header.serverIP,header.serverPort,header.flowType).then((lastFlowId)=>{
                                     if(lastFlowId){
                                         if(header.preFlowId===lastFlowId){
-                                            LKServer[action](msg, ws);
+                                            // LKServer[action](msg, ws);
+                                            LKServer._allAction(action,false,msg, ws)
                                         }else{
                                             this._putTransferFlowPool(header.serverIP,header.serverPort,header.preFlowId,msg,ws);
                                         }
                                     }else{
-                                        LKServer[action](msg, ws);
+                                        // LKServer[action](msg, ws);
+                                        LKServer._allAction(action,false,msg, ws)
                                     }
                                 });
                             }else{
-                                LKServer[action](msg, ws);
+                                // LKServer[action](msg, ws);
+                                LKServer._allAction(action,false,msg, ws)
                             }
 
                         } else {
@@ -269,6 +279,136 @@ let LKServer = {
        this._asyCheckTimeoutRetainMsgs();
        this._clearTimeoutMsgs();
     },
+
+    _allAction:function (action,local,msg, ws){
+        let existFlag = false
+        switch (action) {
+            case 'ping':
+                if(local){
+                    existFlag = true
+                }else{
+                    this.ping(msg,ws)
+                }
+                break
+            case 'fetchMembers':
+                if(local){
+                    existFlag = true
+                }else{
+                    this.fetchMembers(msg,ws)
+                }
+                break
+            case 'login':
+                if(local){
+                    existFlag = true
+                }else{
+                    this.login(msg,ws)
+                }
+                break
+            case 'getAllDetainedMsg':
+                if(local){
+                    existFlag = true
+                }else{
+                    this.getAllDetainedMsg(msg,ws)
+                }
+                break
+            case 'register':
+                if(local){
+                    existFlag = true
+                }else{
+                    this.register(msg,ws)
+                }
+                break
+            case 'unRegister':
+                if(local){
+                    existFlag = true
+                }else{
+                    this.unRegister(msg,ws)
+                }
+                break
+            case 'applyUploadChannel':
+                if(local){
+                    existFlag = true
+                }else{
+                    this.applyUploadChannel(msg,ws)
+                }
+                break
+            case 'sendMsg':
+                if(local){
+                    existFlag = true
+                }else{
+                    this.sendMsg(msg,ws)
+                }
+                break
+            case 'sendMsg2':
+                if(local){
+                    existFlag = true
+                }else{
+                    this.sendMsg2(msg,ws)
+                }
+                break
+            case 'readReport':
+                if(local){
+                    existFlag = true
+                }else{
+                    this.readReport(msg,ws)
+                }
+                break
+            case 'applyMF':
+                if(local){
+                    existFlag = true
+                }else{
+                    this.acceptMF(msg,ws)
+                }
+                break
+            case 'addGroupChat':
+                if(local){
+                    existFlag = true
+                }else{
+                    this.addGroupChat(msg,ws)
+                }
+                break
+            case 'addGroupMembers':
+                if(local){
+                    existFlag = true
+                }else{
+                    this.addGroupMembers(msg,ws)
+                }
+                break
+            case 'setGroupName':
+                if(local){
+                    existFlag = true
+                }else{
+                    this.setGroupName(msg,ws)
+                }
+                break
+            case 'leaveGroup':
+                if(local){
+                    existFlag = true
+                }else{
+                    this.leaveGroup(msg,ws)
+                }
+                break
+            case 'setUserName':
+                if(local){
+                    existFlag = true
+                }else{
+                    this.setUserName(msg,ws)
+                }
+                break
+            case 'setUserPic':
+                if(local){
+                    existFlag = true
+                }else{
+                    this.setUserPic(msg,ws)
+                }
+                break
+            default:
+                existFlag = false
+                break
+        }
+        return existFlag;
+    },
+
     getIP:function () {
         return config.ip
 
