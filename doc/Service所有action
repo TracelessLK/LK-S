@@ -1,15 +1,57 @@
 Server所有事件
 
 1、ping
-{ msg:
-   { header:
-      { version: '1.0',
-        id: 'e1bfeba4-d1b3-4709-9ecc-3e0753960a27',
-        action: 'ping',
-        time: 1559266256651,
-        uid: '61e1241a-f8d5-4942-9801-9fbfc7e6e78e',
-        did: '9ca10f5a-8873-4eab-af38-c929b9eff818' },
-     body: { content: '{ orgMCode: '023a9b2c2b2c43647aa76bc58294ba71',memberMCode: '0b9055e73271219d5dee9bfd8ef3442d' }' } } }
+    发送ping消息体, eg:
+        msg:
+            body:
+                content:
+                    memberMCode: "0b9055e73271219d5dee9bfd8ef3442d"
+                    orgMCode: "023a9b2c2b2c43647aa76bc58294ba71"
+            header:
+                action: "ping"
+                did: "9ca10f5a-8873-4eab-af38-c929b9eff818"
+                id: "1690bd44-1564-4ac5-8c4f-3bf9b14641f9"
+                time: 1560147084977
+                timeout: undefined
+                uid: "61e1241a-f8d5-4942-9801-9fbfc7e6e78e"
+                version: "1.0"
+        字段说明：
+            id: 自动生成UUID,String
+            uid: 当前登录用户ID,String
+            did: 设备ID,字符串
+            time: 当前系统时间,long
+            timeout: 没有使用，为undefined
+            version: 版本号,String
+            action: 发送"ping",到服务端
+            content: json对象
+                memberMCode: String
+                orgMCode: String
+
+        执行逻辑：
+            拼接消息：
+                await Promise.all([this.applyChannel(), this._asyNewRequest("ping", {orgMCode, memberMCode})])
+            服务端发送消息：
+                await result[0]._sendMessage(result[1])
+            设置定时60s定时：
+                setTimeout(() => { this._ping() }, 60000)
+
+
+    接收ping消息体, eg:
+
+    msg:
+    { msg:
+       { header:
+          { version: '1.0',
+            id: '46729178-2f87-4b4b-8927-22e7c7787404',
+            action: 'ping',
+            time: 1560147201306,
+            uid: '61e1241a-f8d5-4942-9801-9fbfc7e6e78e',
+            did: '9ca10f5a-8873-4eab-af38-c929b9eff818' },
+         body:
+          { content: { orgMCode: '023a9b2c2b2c43647aa76bc58294ba71',memberMCode: '0b9055e73271219d5dee9bfd8ef3442d' } }
+        }
+    }
+
 
 2、fetchMembers
 { msg:
