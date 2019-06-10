@@ -56,7 +56,9 @@
     "eslint-plugin-standard": "^4.0.0",
     "inquirer": "^6.3.1",
     "jest": "^23.4.0",
+    "mocha": "^6.1.4",
     "node-ssh": "^5.1.2",
+    "supertest": "^4.0.2",
     "suppose": "^0.6.2"
   },
   "config": {
