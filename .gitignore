@@ -7,4 +7,5 @@ log
 ._*
 
 # intelliJ
-.idea
+.idea/*
+!.idea/misc.xml
