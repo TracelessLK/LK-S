@@ -56,7 +56,7 @@ const config = {
       key: path.resolve(rootDir, 'certificate/serviceKey_traceless.p8')
     }
   },
-  serverHostAry: ['62.234.46.12', '192.144.200.234']
+  serverHostAry: ['192.144.200.234']
 }
 config.manifestUrl = 'itms-services://?action=download-manifest&url=https://raw.githubusercontent.com/tracelessman/LK-M/master/ios/manifest.plist'
 

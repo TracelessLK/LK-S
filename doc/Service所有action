@@ -19,7 +19,7 @@ Server所有事件
             id: 自动生成UUID,String
             uid: 当前登录用户ID,String
             did: 设备ID,字符串
-            time: 当前系统时间,long
+            time: 当前系统时间,number
             timeout: 没有使用，为undefined
             version: 版本号,String
             action: 发送"ping",到服务端
