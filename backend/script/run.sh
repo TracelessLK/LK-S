@@ -1,0 +1,1 @@
+java -cp build/classes/java/main/ com.lk.App

@@ -5,7 +5,7 @@ package com.lk;
 
 public class App {
     public String getGreeting() {
-        return "Hello world.";
+        return "Hello world 123";
     }
 
     public static void main(String[] args) {
