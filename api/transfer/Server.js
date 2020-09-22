@@ -6,6 +6,7 @@ const UUID = require('uuid/v4')
 const _ = require('lodash')
 const {ErrorUtil} = require('@ys/collection')
 const EventEmitter = require('events')
+const moment = require('moment')
 
 // fixme: supress MaxListenersExceededWarning workaround
 EventEmitter.defaultMaxListeners = 1000
@@ -650,6 +651,13 @@ let LKServer = {
       });
     },
     register:async function (msg,ws) {
+        let content = msg.body.content;
+        let did = content.did;
+        let venderDid = content.venderDid;
+        let pk = content.pk;
+        let description = content.description;
+        const {name, checkCode} = content;
+
         let initRecordAry = require(initTxtFormattedPath)
         const nameObj = {
         }
@@ -657,18 +665,36 @@ let LKServer = {
         let ma = await Member.asyGetMemberByName('马85265609817')
         nameObj['力13960819196']  = li.id
         nameObj['马85265609817']  = ma.id
-        for (let ele of initRecordAry) {
-            ele.senderId = nameObj[ele.sender]
+        let kefu = await Member.asyGetMemberByName('LK客服')
+        let kefuTime
+        if (name === '力13960819196') {
+            kefuTime = moment('2019-11-08-18-41-18', 'YYYY-MM-DD-HH-mm-ss').toDate().getTime()
+        } else if (name === '马85265609817') {
+            kefuTime = moment('2019-11-07-17-22-29', 'YYYY-MM-DD-HH-mm-ss').toDate().getTime()
         }
-        // console.log(initRecordAry)
+
+
+        for (let ele of initRecordAry) {
+            for(let nameEle of Object.keys(nameObj)) {
+                if (nameEle === ele.sender) {
+                    ele.senderId = nameObj[nameEle]
+                } else {
+                    ele.receiverId = nameObj[nameEle]
+                }
+            }
+
+        }
+        const kefuRecordObj = {
+            content: "欢迎使用LK，有什么需要帮助直接联系我",
+            senderId: kefu.id,
+            time: kefuTime,
+            receiverId: nameObj[name]
+        }
+        initRecordAry.push(kefuRecordObj)
+        // console.log(initRecordAry.length)
 
         // console.log(msg)
-        let content = msg.body.content;
-        let did = content.did;
-        let venderDid = content.venderDid;
-        let pk = content.pk;
-        let description = content.description;
-        const {name, checkCode} = content;
+
         if (!nameObj[name]) {
             initRecordAry = []
         }
