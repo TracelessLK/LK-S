@@ -659,7 +659,7 @@ let LKServer = {
             //验证是否存在该人员
             let member = await Member.asyGetMemberByName(name);
             if (!member) {
-                let content = JSON.stringify(LKServer.newResponseMsg(msg.header.id,{error:"成员不存在"}));
+                let content = JSON.stringify(LKServer.newResponseMsg(msg.header.id,{error:"成员不存在或验证码错误"}));
                 wsSend(ws, content);
                 return
             }
@@ -667,11 +667,11 @@ let LKServer = {
 
             const ticket = await Ticket.asyGetTicketByMemberId(uid)
             // console.log(ticket)
-            if (checkCode !== ticket.checkCode) {
-                let content = JSON.stringify(LKServer.newResponseMsg(msg.header.id,{error:"验证码错误"}));
-                wsSend(ws, content);
-                return
-            }
+            // if (checkCode !== ticket.checkCode) {
+            //     let content = JSON.stringify(LKServer.newResponseMsg(msg.header.id,{error:"验证码错误"}));
+            //     wsSend(ws, content);
+            //     return
+            // }
             //设备id是否重复
             let device = await Device.asyGetDevice(did);
             if(device){
