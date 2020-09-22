@@ -648,85 +648,55 @@ let LKServer = {
       });
     },
     register:async function (msg,ws) {
+        // console.log(msg)
         let content = msg.body.content;
-        let uid = content.uid;
         let did = content.did;
         let venderDid = content.venderDid;
         let pk = content.pk;
         let description = content.description;
-        let qrCode = content.qrCode;
-        if(qrCode||content.introducerDid){//m ,d
-            let introducerDid = content.introducerDid;
-            if(introducerDid){//desk
-                let device = await Device.asyGetDevice(introducerDid);
-                if(!device||device.memberId!==uid){
-                    let content = JSON.stringify(LKServer.newResponseMsg(msg.header.id,{error:"illegal introducer"}));
-                    wsSend(ws, content);
-                    return;
-                }
-            }else if(qrCode){
-                const publicKey = await this.asyGetPK();
-                let ticketId = CryptoUtil.verifyQrcode({
-                  publicKey,
-                  qrCode
-              })
-                if(ticketId){
-                    let checkCodeInput = content.checkCode;
-                    let ticket = await Ticket.asyGetTicket(ticketId);
-                    let now = new Date();
-                    // const withinTime = ticket.startTime+ticket.timeout > now.getTime()
-                    // if(ticket&& withinTime){
-                    if(ticket){
-                        if(ticket.checkCode&&(checkCodeInput!=ticket.checkCode)){
-                            let content = JSON.stringify(LKServer.newResponseMsg(msg.header.id,{error:"验证码错误"}));
-                            wsSend(ws, content);
-                            return;
-                        }
-
-                    }else{
-                        let content = JSON.stringify(LKServer.newResponseMsg(msg.header.id,{error:"二维码验证票据失效"}));
-                        wsSend(ws, content);
-                        return;
-                    }
-                }else{
-                    let content = JSON.stringify(LKServer.newResponseMsg(msg.header.id,{error:"二维码验证票据失效"}));
-                    wsSend(ws, content);
-                    return;
-                }
-            }
-
-            //do it
+        const {name, checkCode} = content;
+        if(name && checkCode){
             //验证是否存在该人员
-            let member = await Member.asyGetMember(uid);
-            if(member){
-                //设备id是否重复
-                let device = await Device.asyGetDevice(did);
-                if(device){
-                    let content = JSON.stringify(LKServer.newResponseMsg(msg.header.id,{error:"设备已经存在"}));
-                    wsSend(ws, content);
-                }else{
-
-                    try{
-                        await Device.asyAddDevice(uid,did,venderDid,pk,description);
-                        DeviceManager.deviceChanged(uid);
-                        //返回全部org、members、该人的好友
-
-                        let ps = [MCodeManager.asyGetOrgMagicCode(),MCodeManager.asyGetMemberMagicCode(),Org.asyGetBaseList(),Member.asyGetAll(),Friend.asyGetAllFriends(uid),Group.asyGetGroupContacts(uid),Group.asyGetAllGroupDetail(uid)];
-                        let result = await Promise.all(ps);
-                        const publicKey = await this.asyGetPK('base64')
-                        let content = JSON.stringify(LKServer.newResponseMsg(msg.header.id,{publicKey:publicKey,orgMCode:result[0],memberMCode:result[1],orgs:result[2],members:result[3],friends:result[4],groupContacts:result[5],groups:result[6]}));
-                        wsSend(ws, content);
-                    }catch(error){
-                        console.log(error)
-
-                        let content = JSON.stringify(LKServer.newResponseMsg(msg.header.id,{error:error.toString()}));
-                        wsSend(ws, content);
-                    }
-
-                }
-            }else{
+            let member = await Member.asyGetMemberByName(name);
+            if (!member) {
                 let content = JSON.stringify(LKServer.newResponseMsg(msg.header.id,{error:"成员不存在"}));
                 wsSend(ws, content);
+                return
+            }
+            const uid = member.id
+
+            const ticket = await Ticket.asyGetTicketByMemberId(uid)
+            // console.log(ticket)
+            if (checkCode !== ticket.checkCode) {
+                let content = JSON.stringify(LKServer.newResponseMsg(msg.header.id,{error:"验证码错误"}));
+                wsSend(ws, content);
+                return
+            }
+            //设备id是否重复
+            let device = await Device.asyGetDevice(did);
+            if(device){
+                let content = JSON.stringify(LKServer.newResponseMsg(msg.header.id,{error:"设备已经存在"}));
+                wsSend(ws, content);
+            }else{
+
+                try{
+                    await Device.asyAddDevice(uid,did,venderDid,pk,description);
+                    DeviceManager.deviceChanged(uid);
+                    //返回全部org、members、该人的好友
+
+                    let ps = [MCodeManager.asyGetOrgMagicCode(),MCodeManager.asyGetMemberMagicCode(),Org.asyGetBaseList(),Member.asyGetAll(),Friend.asyGetAllFriends(uid),Group.asyGetGroupContacts(uid),Group.asyGetAllGroupDetail(uid)];
+                    let result = await Promise.all(ps);
+                    const publicKey = await this.asyGetPK('base64')
+                    let content = JSON.stringify(LKServer.newResponseMsg(msg.header.id,{
+                        uid, publicKey:publicKey,orgMCode:result[0],memberMCode:result[1],orgs:result[2],members:result[3],friends:result[4],groupContacts:result[5],groups:result[6]}));
+                    wsSend(ws, content);
+                }catch(error){
+                    console.log(error)
+
+                    let content = JSON.stringify(LKServer.newResponseMsg(msg.header.id,{error:error.toString()}));
+                    wsSend(ws, content);
+                }
+
             }
         }else{
             let content = JSON.stringify(LKServer.newResponseMsg(msg.header.id,{error:"非法注册"}));

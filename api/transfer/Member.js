@@ -19,6 +19,23 @@ let Member = {
             });
         });
     },
+    asyGetMemberByName:function (name) {
+        return new Promise((resolve,reject)=>{
+            let sql = `
+                select * from member
+                where name=? and orgId is not null
+            `;
+            Pool.query(sql,[name], (error,results,fields) =>{
+                if(error){
+                    resolve(null);
+                }else if(results.length==0){
+                    resolve(null);
+                }else{
+                    resolve(results[0]);
+                }
+            });
+        });
+    },
     asyGetAll:function () {
         return new Promise((resolve,reject)=>{
             let sql = `
