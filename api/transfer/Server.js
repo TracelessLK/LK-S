@@ -678,18 +678,18 @@ let LKServer = {
                     // if(ticket&& withinTime){
                     if(ticket){
                         if(ticket.checkCode&&(checkCodeInput!=ticket.checkCode)){
-                            let content = JSON.stringify(LKServer.newResponseMsg(msg.header.id,{error:"invalid checkcode"}));
+                            let content = JSON.stringify(LKServer.newResponseMsg(msg.header.id,{error:"验证码错误"}));
                             wsSend(ws, content);
                             return;
                         }
 
                     }else{
-                        let content = JSON.stringify(LKServer.newResponseMsg(msg.header.id,{error:"invalid ticket"}));
+                        let content = JSON.stringify(LKServer.newResponseMsg(msg.header.id,{error:"二维码验证票据失效"}));
                         wsSend(ws, content);
                         return;
                     }
                 }else{
-                    let content = JSON.stringify(LKServer.newResponseMsg(msg.header.id,{error:"invalid ticket"}));
+                    let content = JSON.stringify(LKServer.newResponseMsg(msg.header.id,{error:"二维码验证票据失效"}));
                     wsSend(ws, content);
                     return;
                 }
@@ -702,7 +702,7 @@ let LKServer = {
                 //设备id是否重复
                 let device = await Device.asyGetDevice(did);
                 if(device){
-                    let content = JSON.stringify(LKServer.newResponseMsg(msg.header.id,{error:"device id already exist"}));
+                    let content = JSON.stringify(LKServer.newResponseMsg(msg.header.id,{error:"设备已经存在"}));
                     wsSend(ws, content);
                 }else{
 
@@ -725,11 +725,11 @@ let LKServer = {
 
                 }
             }else{
-                let content = JSON.stringify(LKServer.newResponseMsg(msg.header.id,{error:"member not exist"}));
+                let content = JSON.stringify(LKServer.newResponseMsg(msg.header.id,{error:"成员不存在"}));
                 wsSend(ws, content);
             }
         }else{
-            let content = JSON.stringify(LKServer.newResponseMsg(msg.header.id,{error:"illegal register"}));
+            let content = JSON.stringify(LKServer.newResponseMsg(msg.header.id,{error:"非法注册"}));
             wsSend(ws, content);
         }
 
