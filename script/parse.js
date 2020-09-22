@@ -3,7 +3,7 @@ const path = require('path')
 const moment = require('moment')
 
 const initTxtPath = path.resolve(__dirname, '../local/init.txt')
-const initTxtFormattedPath = path.resolve(__dirname, '../local/initFormatted.txt')
+const initTxtFormattedPath = path.resolve(__dirname, '../local/initFormatted.json')
 
 const content = fs.readFileSync(initTxtPath).toString()
 

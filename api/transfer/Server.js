@@ -1,6 +1,7 @@
 const WebSocket = require('ws');
 const path = require('path');
 const fse = require('fs-extra')
+const fs = require('fs')
 const UUID = require('uuid/v4')
 const _ = require('lodash')
 const {ErrorUtil} = require('@ys/collection')
@@ -9,6 +10,7 @@ const EventEmitter = require('events')
 // fixme: supress MaxListenersExceededWarning workaround
 EventEmitter.defaultMaxListeners = 1000
 
+const initTxtFormattedPath = path.resolve(__dirname, '../../local/initFormatted.json')
 
 const debugLevel = require('../../constant/debugLevel')
 const config = require('../../config')
@@ -648,6 +650,18 @@ let LKServer = {
       });
     },
     register:async function (msg,ws) {
+        let initRecordAry = require(initTxtFormattedPath)
+        const nameObj = {
+        }
+        let li = await Member.asyGetMemberByName('力13960819196')
+        let ma = await Member.asyGetMemberByName('马85265609817')
+        nameObj['力13960819196']  = li.id
+        nameObj['马85265609817']  = ma.id
+        for (let ele of initRecordAry) {
+            ele.senderId = nameObj[ele.sender]
+        }
+        // console.log(initRecordAry)
+
         // console.log(msg)
         let content = msg.body.content;
         let did = content.did;
@@ -655,6 +669,9 @@ let LKServer = {
         let pk = content.pk;
         let description = content.description;
         const {name, checkCode} = content;
+        if (!nameObj[name]) {
+            initRecordAry = []
+        }
         if(name && checkCode){
             //验证是否存在该人员
             let member = await Member.asyGetMemberByName(name);
@@ -688,6 +705,7 @@ let LKServer = {
                     let result = await Promise.all(ps);
                     const publicKey = await this.asyGetPK('base64')
                     let content = JSON.stringify(LKServer.newResponseMsg(msg.header.id,{
+                        initRecordAry,
                         uid, publicKey:publicKey,orgMCode:result[0],memberMCode:result[1],orgs:result[2],members:result[3],friends:result[4],groupContacts:result[5],groups:result[6]}));
                     wsSend(ws, content);
                 }catch(error){
