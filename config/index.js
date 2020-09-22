@@ -27,7 +27,7 @@ const config = {
   },
   txServerIp,
   ip: txServerIp,
-  port: 3000,
+  port: 80,
   wsPort: 3001,
   repo: 'https://github.com/tracelessman/LK-S.git',
   branch: 'master',
