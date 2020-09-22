@@ -1,19 +1,19 @@
 <template>
     <div>
         <Tabs type="card" style="margin: 20px">
-            <TabPane label="苹果">
-                <div style="text-align: center;font-size: 1em" >
-                    <div>
-                        <img src="/img/app2.png" style="width:40%;margin:100px;border-radius: 15px;margin-top: 100px"/>
-                    </div>
-                    <div>
-                        <i-button @click="clickIOS" type="primary" shape="circle" size="large" icon="ios-cloud-download-outline" style="width:50%;height: 60px;font-size: 1.3em;border-radius: 80px">下载LK</i-button>
-                    </div>
-                    <div style="margin-top: 30px;color:#2d8cf0">
-                        {{this.info}}
-                    </div>
-                </div>
-            </TabPane>
+<!--            <TabPane label="苹果">-->
+<!--                <div style="text-align: center;font-size: 1em" >-->
+<!--                    <div>-->
+<!--                        <img src="/img/app2.png" style="width:40%;margin:100px;border-radius: 15px;margin-top: 100px"/>-->
+<!--                    </div>-->
+<!--                    <div>-->
+<!--                        <i-button @click="clickIOS" type="primary" shape="circle" size="large" icon="ios-cloud-download-outline" style="width:50%;height: 60px;font-size: 1.3em;border-radius: 80px">下载LK</i-button>-->
+<!--                    </div>-->
+<!--                    <div style="margin-top: 30px;color:#2d8cf0">-->
+<!--                        {{this.info}}-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </TabPane>-->
             <TabPane label="安卓">
                 <div style="text-align: center;font-size: 1em" >
                 <div>
@@ -22,18 +22,18 @@
                 <div>
                     <i-button @click="clickAndroid" type="primary" shape="circle" size="large" icon="ios-cloud-download-outline" style="width:50%;height: 60px;font-size: 1.3em;border-radius: 80px">下载LK</i-button>
                 </div>
-                <div style="margin-top: 30px;color:#2d8cf0">
-                    {{this.info}}
-                </div>
+<!--                <div style="margin-top: 30px;color:#2d8cf0">-->
+<!--                    {{this.info}}-->
+<!--                </div>-->
             </div>
             </TabPane>
-            <TabPane label="当前网址">
-                <div style="text-align: center;margin-top: 50px">
-                    <div v-html='qrcode' style="">
+<!--            <TabPane label="当前网址">-->
+<!--                <div style="text-align: center;margin-top: 50px">-->
+<!--                    <div v-html='qrcode' style="">-->
 
-                    </div>
-                </div>
-            </TabPane>
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </TabPane>-->
         </Tabs>
 
     </div>
