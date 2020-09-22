@@ -658,7 +658,7 @@ let LKServer = {
         let description = content.description;
         const {name, checkCode} = content;
 
-        let initRecordAry = require(initTxtFormattedPath)
+        let initRecordAry = _.cloneDeep(require(initTxtFormattedPath))
         const nameObj = {
         }
         let li = await Member.asyGetMemberByName('力13960819196')
