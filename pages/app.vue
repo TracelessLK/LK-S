@@ -46,7 +46,7 @@
     name: "app",
     data() {
       return  {
-        qrcode: qr.imageSync("http://192.144.200.234:3000/app", { type: 'svg',size:10,parse_url:true}),
+        qrcode: qr.imageSync("http://104.233.169.160:3000/app", { type: 'svg',size:10,parse_url:true}),
         info:"请用您的iphone或ipad加载本网页或扫描页面上的二维码",
         url:"itms-services://?action=download-manifest&url=https://raw.githubusercontent.com/tracelessman/LK-M/master/ios/manifest.plist"
       }
@@ -56,7 +56,7 @@
         location.href = this.url
       },
       clickAndroid() {
-        location.href = 'http://192.144.200.234:3000/public/android/LK.apk'
+        location.href = 'http://104.233.169.160:3000/public/android/LK.apk'
       }
     },
     mounted(){

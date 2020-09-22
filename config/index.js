@@ -1,6 +1,6 @@
 /* eslint-disable global-require */
 const _ = require('lodash')
-const txServerIp = '192.144.200.234'
+const txServerIp = '104.233.169.160'
 const fs = require('fs')
 const path = require('path')
 const debug = require('debug')('configIndex')
@@ -56,7 +56,7 @@ const config = {
       key: path.resolve(rootDir, 'certificate/serviceKey_traceless.p8')
     }
   },
-  serverHostAry: ['192.144.200.234']
+  serverHostAry: ['104.233.169.160']
 }
 config.manifestUrl = 'itms-services://?action=download-manifest&url=https://raw.githubusercontent.com/tracelessman/LK-M/master/ios/manifest.plist'
 
