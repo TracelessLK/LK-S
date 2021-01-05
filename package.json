@@ -23,7 +23,7 @@
     "@ys/collection": "git+https://github.com/spirit1453/node_collection.git#publish",
     "aes-js": "^3.1.1",
     "apn": "^2.2.0",
-    "axios": "^0.16.2",
+    "axios": "^0.21.1",
     "body-parser": "^1.18.3",
     "crypto-js": "^3.1.9-1",
     "debug": "^4.1.1",
